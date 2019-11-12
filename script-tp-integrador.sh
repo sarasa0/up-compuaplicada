@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 #Pedir un numero entero y mostrar esa cantidad de elementos de la sucesion de Fibonacci.
 #Pedir un numero entero y mostrar por pantalla ese numero en forma invertida.
@@ -28,16 +28,56 @@ function salir_saludando(){
 }
 
 function fibonacci(){
-	read -p "ingrese cantidad de numeros" CANT
-	i=0
-	NUM1=1
-	NUM2=1
-	while [$CANT -gt $i] do
-		echo $NUM2
-		NUM1=$NUM2
-		((NUM2=NUM2+NUM1))
-		((i=i+1))
-	done
+    read -p "ingrese cantidad de numeros " CANT
+    i=2
+    NUM1=1
+    NUM2=1
+    NUM3=1
+    if [ $CANT -ge 1 ]; then
+	echo $NUM1
+    fi
+    if [ $CANT -ge 2 ]; then
+	echo $NUM2
+    fi
+    while [ $CANT -gt $i ]; do
+        ((NUM1=$NUM2))
+        ((NUM2=$NUM3))
+	((NUM3=$NUM2+$NUM1))
+	echo $NUM3
+        ((i=$i+1))
+    done
+}
+
+function invertir(){
+read -p "ingrese numero a invertir " NUM
+echo $NUM | rev
+}
+
+function palindromo (){
+read -p "ingrese la palabra " PAL
+REV=$(echo $PAL | rev)
+if [ $REV == $PAL ]; then 
+    echo $PAL "es palindromo" 
+else
+    echo $PAL "no es palindromo"
+fi
+}
+
+function cantlineas(){
+read -p "ingrese el path al archivo " path
+echo $(wc -l < $path)
+}
+
+function ordenar(){
+arr=()
+    echo "ingrese 5 numeros"
+    read -a arr
+    echo ${arr[*]} | tr " " "\n" | sort -n | tr "\n" " "
+}
+
+function archtipo(){
+    read -p "ingrese el directorio " path
+echo $(ls -q -U $path | awk -F . '{print $NF}' | sort | uniq -c | awk '{print $2,$1}')
 }
 
 OPCION=0
@@ -45,21 +85,15 @@ mostrar_menu
 while true; do
     read -p "Ingrese una opcion: " OPCION
     case $OPCION in
-        1)  fibonacci;;
-			break;;
-		2)	
-			break;;
-		3)
-			break;;
-		4)
-			break;;
-		5)
-			break;;
-		6)
-			break;;
-		7) salir_saludando `whoami`
-            break;;
-		*)  echo "Opcion incorrecta";;
+        1) fibonacci;;
+	2) invertir;;
+	3) palindromo;;
+	4) cantlineas;;
+	5) ordenar;;
+	6) archtipo;;
+	7) salir_saludando `whoami`
+        break;;
+	*)  echo "Opcion incorrecta";;
 
     esac
 done
